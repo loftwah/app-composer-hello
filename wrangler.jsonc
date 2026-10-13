@@ -1,0 +1,12 @@
+{
+  "name": "composer-hello",
+  "main": "src/worker.ts",
+  "compatibility_date": "2026-10-13",
+  "routes": [
+    {
+      "pattern": "ready.loftwah.com",
+      "custom_domain": true
+    }
+  ],
+  "workers_dev": true
+}

@@ -1,0 +1,27 @@
+{
+  "contract": 1,
+  "id": "hello",
+  "runtime": "cloudflare-worker",
+  "dataVersion": 1,
+  "capabilities": [],
+  "routes": [
+    "/hello"
+  ],
+  "configuration": {
+    "title": {
+      "type": "string",
+      "maxLength": 80
+    },
+    "intro": {
+      "type": "string",
+      "maxLength": 240
+    },
+    "theme": {
+      "type": "select",
+      "options": [
+        "daylight",
+        "midnight"
+      ]
+    }
+  }
+}
