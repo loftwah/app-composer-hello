@@ -2,3 +2,5 @@ node_modules/
 .wrangler/
 .private/
 .dev.vars
+
+dist/
