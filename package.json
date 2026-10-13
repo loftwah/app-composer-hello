@@ -1,1 +1,12 @@
-{"name": "app-composer-hello", "type": "module", "private": true, "scripts": {"dev": "wrangler dev", "deploy": "node deploy.mjs"}, "devDependencies": {"wrangler": "4.143.1"}}
+{
+  "name": "app-composer-hello",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "node deploy.mjs"
+  },
+  "devDependencies": {
+    "wrangler": "4.143.1"
+  }
+}
