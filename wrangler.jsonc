@@ -5,8 +5,18 @@
   "routes": [
     {
       "pattern": "ready.loftwah.com",
-      "custom_domain": true
-    }
+      "custom_domain": true,
+    },
   ],
-  "workers_dev": true
+  "workers_dev": true,
+  "assets": {
+    "directory": "public",
+    "binding": "ASSETS",
+    "run_worker_first": true,
+  },
+  "vars": {
+    "PUBLIC_ORIGIN": "https://ready.loftwah.com",
+  },
+  "account_id": "1003dc1d93af0ebea56b2f1252f89627",
+  "preview_urls": false,
 }
