@@ -1,6 +1,23 @@
 # Before the idea
 
-MIT, independently deployable Hello World reference for App Composer. Configurable `config.json`; no database or user data. `pnpm install; pnpm dev; pnpm deploy`. Deployment proves `/build.json` exact source identity, not mere HTTP 200. Disposable reference is noindex. Retaining or publishing it requires a reviewed indexing policy.
+MIT, independently deployable Hello World reference for App Composer. Configurable `config.json`; no database or user data. Use `pnpm install` and `pnpm dev` locally. Deployment proves `/build.json` exact source identity, not mere HTTP 200. Disposable reference is noindex. Retaining or publishing it requires a reviewed indexing policy.
+
+## Select the release target
+
+Reviewed 14 October 2026. A copied configuration is not permission to deploy to its original account or domain. Your agent must select the intended GitHub repository, Cloudflare account, Worker and exact HTTPS origin before release, then configure `wrangler.jsonc` to match. Source must be reviewed, committed and pushed to main in that selected repository.
+
+```sh
+HELLO_REPOSITORY=YOUR_GITHUB_OWNER/YOUR_REPOSITORY \
+HELLO_ACCOUNT_ID=YOUR_ACCOUNT_ID \
+HELLO_WORKER=YOUR_WORKER_NAME \
+HELLO_ORIGIN=https://YOUR_HOST pnpm deploy
+```
+
+These are non-secret target identifiers. Authentication stays in your authorised GitHub/Wrangler environment. Get Ready supplies them from its already verified scope; it still executes only the maintained reference. This standalone command does not provision a customer fork, domain or account.
+
+The release refuses absent intent, credential-bearing origins/remotes, another process account, mismatched repository/configuration and extra custom-domain routes before deployment. A custom-domain target requires exactly that hostname. A workers.dev target requires its selected Worker, `workers_dev: true` and no custom routes; your agent must separately verify the account subdomain and authorise any provisioning. Official [Wrangler configuration](https://developers.cloudflare.com/workers/wrangler/configuration/) and [workers.dev routing](https://developers.cloudflare.com/workers/configuration/routing/workers-dev/) reviewed 14 October 2026.
+
+The guard verifies actual GitHub main, reruns `pnpm test`, builds/deploys through the pinned Wrangler with the explicit root configuration, then checks the selected origin's exact app/source/title/contract with bounded retries. Redirects and another hostname cannot satisfy verification. It no longer probes the launch operator's hostname when configured for another target. Local `pnpm test` has no network/deployment side effects. Physical devices and a real customer-owned deployment remain separate acceptance gates.
 
 ## Public project standard
 
