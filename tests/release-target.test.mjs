@@ -48,7 +48,8 @@ test('a target edit hidden from Git during the dry-run cannot reach actual deplo
  mkdirSync(workspace);mkdirSync(bin);
  const git=args=>execFileSync('git',args,{cwd:workspace,encoding:'utf8',stdio:['ignore','pipe','pipe']}).trim();
  try{
-  for(const file of ['deploy.mjs','release-target.mjs'])copyFileSync(new URL('../'+file,import.meta.url),join(workspace,file));
+  mkdirSync(join(workspace,'scripts'));
+  for(const file of ['deploy.mjs','release-target.mjs','scripts/verify-sharing.mjs'])copyFileSync(new URL('../'+file,import.meta.url),join(workspace,file));
   writeFileSync(join(workspace,'package.json'),' {"type":"module"}');
   writeFileSync(join(workspace,'.gitignore'),'node_modules/\n');
   writeFileSync(join(workspace,'wrangler.jsonc'),JSON.stringify(config));

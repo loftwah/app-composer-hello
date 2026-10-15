@@ -1,3 +1,4 @@
+import {verifySharing} from './scripts/verify-sharing.mjs';
 import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import {expectedTarget,verifyTarget,verifyIdentity} from './release-target.mjs';
@@ -56,4 +57,5 @@ for (let attempt = 0; attempt < 12; attempt++) {
   await new Promise((resolve) => setTimeout(resolve, 1500));
 }
 if (!verified) throw new Error("Live source identity did not converge");
+await verifySharing(target.origin);
 console.log("Verified live hello " + sha+' at '+target.origin);
