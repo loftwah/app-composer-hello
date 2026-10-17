@@ -21,6 +21,10 @@ The release refuses absent intent, credential-bearing origins/remotes, another p
 
 The guard verifies actual GitHub main, reruns `pnpm test`, builds/deploys through the pinned Wrangler with the explicit root configuration, then checks the selected origin's exact app/source/title/contract with bounded retries. Redirects and another hostname cannot satisfy verification. It no longer probes the launch operator's hostname when configured for another target. Local `pnpm test` has no network/deployment side effects. Physical devices and a real customer-owned deployment remain separate acceptance gates.
 
+![Hello World public reference, captured in a real local browser](docs/images/public-reference.png)
+
+This is the actual public interface, captured locally with its fictional example content.
+
 ## Public project standard
 
 Reviewed 13 October 2026; artwork and first-deployment clarity reviewed 17 October 2026. The app supplies saved reader dark/light themes, native app navigation with Ctrl/Cmd+K and ordinary links, visible keyboard focus, phone layouts, favicon/touch icon and page-specific social metadata. These features do not widen signup, owner access or disclosure permissions.
@@ -52,3 +56,5 @@ The shared header keeps theme switching as a quiet current-mode sun/moon icon. P
 The committed `public/brand/launcher.js` and `launcher.css` follow Composer's maintained launcher contract. The controller is generated from Composer's strictly checked `src/browser/launcher.ts`; app destinations, theme keys and gallery filters stay local. Review and copy updates with Composer's explicit `pnpm ui:assets --check|--write /absolute/this-checkout`, then run this app's checks and release independently. No runtime Composer asset dependency or automatic update is added.
 
 Family typography and launcher refinement, reviewed 18 October 2026: headings use the selected self-hosted Latin Space Grotesk variable font; CSS and preload name the same versioned local asset. The Linkarooie launcher thumbnail uses the reviewed curator crop. Superseded assets remain available. Source and byte provenance: [`public/brand/family-assets-20261018.md`](public/brand/family-assets-20261018.md).
+
+Identity/sharing refinement, 18 October 2026: the app now serves dated optical PNG icons and purpose-first share cards derived from its existing illustration. All five launcher thumbnails are dated local copies. Prior immutable assets and owner configuration are retained; provenance and exact hashes are in `public/brand/identity-sharing-20261018.json`.
