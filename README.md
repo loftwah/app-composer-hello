@@ -21,7 +21,11 @@ The guard verifies actual GitHub main, reruns `pnpm test`, builds/deploys throug
 
 ## Public project standard
 
-Reviewed 13 October 2026. The app supplies saved reader dark/light themes, native app navigation with Ctrl/Cmd+K and ordinary links, visible keyboard focus, phone layouts, favicon/touch icon and page-specific social metadata. Original generated App Composer artwork is retained with its prompt; functional icons remain vectors. These features do not widen signup, owner access or disclosure permissions.
+Reviewed 13 October 2026; artwork and first-deployment clarity reviewed 17 October 2026. The app supplies saved reader dark/light themes, native app navigation with Ctrl/Cmd+K and ordinary links, visible keyboard focus, phone layouts, favicon/touch icon and page-specific social metadata. These features do not widen signup, owner access or disclosure permissions.
+
+Artwork: the hero, the default social card, the favicon and the apple-touch icon are this app's own reviewed cut-paper set — a burnt-orange archway with a graphite route line stepping through it toward an arrow. `public/brand/hello-art-v3.PROVENANCE.txt` records the master, every derivative and the SHA-256 of each file. The superseded `hello-share-v2.jpg` baked the words "Hello, world. Your first app with App Composer" into the image and made the reference app wear App Composer's own mark and icon; both are replaced. The display font is preloaded from `/brand/space.woff2`, the file the stylesheet declares as the one bundled face. `tests/page-content.test.mjs` keeps the reviewed artwork, the ordered first-deployment steps and the switcher names tied to the source.
+
+First-deployment clarity: the page states what a successful first deployment proves, then gives the three ordered steps — check this deployment's `/build.json` against the source you deployed, configure your own app in Init, and let your agent deploy and verify the result. The proof link is named for what it shows rather than left as a bare "inspect" link.
 
 Contributions: [Contributing](CONTRIBUTING.md), [Code of Conduct](CODE_OF_CONDUCT.md), [Security](SECURITY.md), [Accessibility](ACCESSIBILITY.md). Physical-device, screen-reader and full platform sharing acceptance remain distinct from browser checks.
 
