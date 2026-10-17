@@ -32,11 +32,11 @@ test("every brand asset the page names exists in this repository", () => {
 test("the display font is preloaded from the file the stylesheet declares", () => {
   assert.match(
     worker,
-    /rel="preload" href="\/brand\/space\.woff2" as="font" type="font\/woff2" crossorigin/,
+    /rel="preload" href="\/brand\/space-latin-20261018\.woff2" as="font" type="font\/woff2" crossorigin/,
   );
   assert.match(
     readFileSync(new URL("public/style.css", root), "utf8"),
-    /@font-face\s*\{[^}]*src:\s*url\("\/brand\/space\.woff2"\)/,
+    /@font-face\s*\{[^}]*src:\s*url\("\/brand\/space-latin-20261018\.woff2"\)/,
   );
 });
 
@@ -51,7 +51,7 @@ test("a first deployment is explained as ordered steps with the real proof link"
 test("the app switcher names each app as its own repository does", () => {
   for (const [name, crop] of [
     ["Here / there", "herethere-small-v4"],
-    ["Linkarooie", "linkarooie-small-v4"],
+    ["Linkarooie", "linkarooie-small-20261018"],
     ["Link Check", "linkcheck-small-v4"],
     ["Hello World", "hello-small-v4"],
     ["Carry / forward", "carryforward-small-v4"],
