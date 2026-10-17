@@ -38,7 +38,7 @@ const unchanged=()=>{
   if(git(['status','--porcelain'])||git(['rev-parse','HEAD'])!==sha||git(['branch','--show-current'])!=='main'||git(['rev-parse','origin/main'])!==sha||readFileSync('wrangler.jsonc','utf8')!==originalDeployment||readFileSync('config.json','utf8')!==originalConfig)throw new Error('The reviewed workspace changed during release verification.');
 };
 unchanged();
-execFileSync('pnpm',['test'],{stdio:'inherit'});
+execFileSync('pnpm',['check'],{stdio:'inherit'});
 const deploymentArgs=["wrangler", "deploy", "--config", "wrangler.jsonc", "--env=", "--define", "BUILD_SHA:" + JSON.stringify(sha)];
 execFileSync('pnpm',[...deploymentArgs,'--dry-run','--outdir','.private/release-build'],{stdio:'inherit'});
 unchanged();

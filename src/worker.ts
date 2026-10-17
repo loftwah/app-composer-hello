@@ -1,5 +1,6 @@
-import {health,publish,pageEvent,type PublisherEnv} from "./publisher.mjs";
+import { health, publish, pageEvent, type PublisherEnv } from "./publisher.mjs";
 import config from "../config.json";
+interface WorkerEnv extends Env, PublisherEnv {}
 declare const BUILD_SHA: string;
 const esc = (s: string) =>
   s.replace(
@@ -10,7 +11,7 @@ const esc = (s: string) =>
       ]!,
   );
 const app = {
-  async fetch(req: Request, env: any) {
+  async fetch(req: Request, env: WorkerEnv) {
     const u = new URL(req.url);
     if (u.pathname === "/build.json")
       return Response.json(
@@ -42,7 +43,13 @@ const app = {
   },
 };
 
-export default {async fetch(req:Request,env:PublisherEnv & {ASSETS:any;PUBLIC_ORIGIN?:string},context:any){
- const probe=health(req,'/healthz','hello',BUILD_SHA);if(probe)return probe;
- const response=await app.fetch(req,env);if(pageEvent(req,response)==='app_open')publish(env,context,req,'app_open');return response;
-}};
+export default {
+  async fetch(req: Request, env: WorkerEnv, context: ExecutionContext) {
+    const probe = health(req, "/healthz", "hello", BUILD_SHA);
+    if (probe) return probe;
+    const response = await app.fetch(req, env);
+    if (pageEvent(req, response) === "app_open")
+      publish(env, context, req, "app_open");
+    return response;
+  },
+};

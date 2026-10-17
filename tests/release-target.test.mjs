@@ -61,7 +61,7 @@ test('a target edit hidden from Git during the dry-run cannot reach actual deplo
   writeFileSync(join(workspace,'node_modules/wrangler/index.mjs'),'import {readFileSync} from "node:fs";export const unstable_readConfig=()=>JSON.parse(readFileSync("wrangler.jsonc"));');
   writeFileSync(join(bin,'gh'),'#!/bin/sh\nprintf "%s\\n" "'+sha+'"\n',{mode:0o755});
   // The real deploy script/Git execute; only provider, build and deploy IO are fixtures.
-  writeFileSync(join(bin,'pnpm'),'#!/bin/sh\nif [ "$1" = test ]; then exit 0; fi\ncase "$*" in *--dry-run*) git update-index --assume-unchanged wrangler.jsonc; printf " " >> wrangler.jsonc; exit 0;; esac\nprintf "unexpected deployment" > "$RELEASE_TEST_MARKER"\n',{mode:0o755});
+  writeFileSync(join(bin,'pnpm'),'#!/bin/sh\nif [ "$1" = test ] || [ "$1" = check ]; then exit 0; fi\ncase "$*" in *--dry-run*) git update-index --assume-unchanged wrangler.jsonc; printf " " >> wrangler.jsonc; exit 0;; esac\nprintf "unexpected deployment" > "$RELEASE_TEST_MARKER"\n',{mode:0o755});
   assert.throws(()=>execFileSync(process.execPath,['deploy.mjs'],{cwd:workspace,env:{...env,PATH:bin+':'+process.env.PATH,HOME:fixture,RELEASE_TEST_MARKER:marker},encoding:'utf8',stdio:['ignore','pipe','pipe']}),error=>error.status===1&&String(error.stderr).includes('workspace changed'));
   assert.equal(git(['status','--porcelain']),'');assert.equal(existsSync(marker),false);
   assert.equal(readFileSync(join(workspace,'wrangler.jsonc'),'utf8').endsWith(' '),true);

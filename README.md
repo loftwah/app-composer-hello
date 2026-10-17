@@ -1,4 +1,6 @@
 # Before the idea
+[Development commands and checked source map](ENGINEERING.md).
+
 
 MIT, independently deployable Hello World reference for App Composer. Configurable `config.json`; no database or user data. Use `pnpm install` and `pnpm dev` locally. Deployment proves `/build.json` exact source identity, not mere HTTP 200. Disposable reference is noindex. Retaining or publishing it requires a reviewed indexing policy.
 
