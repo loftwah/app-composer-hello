@@ -12,7 +12,7 @@ test("the reference page shows the reviewed artwork and never a baked-in card", 
   assert.match(worker, /\/brand\/hello-art-v4-480\.webp 480w/);
   assert.match(worker, /srcset="\/brand\/hello-art-v4-480\.webp 480w/);
   assert.match(worker, /width="960" height="960"/);
-  assert.match(worker, /\/brand\/hello-share-v4\.jpg/);
+  assert.match(worker, /\/brand\/hello-share-20261018\.jpg/);
   assert.doesNotMatch(worker, /hello-share-v2|share-ai-v1|greeting card and paper sprout/);
 });
 
@@ -32,11 +32,11 @@ test("every brand asset the page names exists in this repository", () => {
 test("the display font is preloaded from the file the stylesheet declares", () => {
   assert.match(
     worker,
-    /rel="preload" href="\/brand\/space\.woff2" as="font" type="font\/woff2" crossorigin/,
+    /rel="preload" href="\/brand\/space-latin-20261018\.woff2" as="font" type="font\/woff2" crossorigin/,
   );
   assert.match(
     readFileSync(new URL("public/style.css", root), "utf8"),
-    /@font-face\s*\{[^}]*src:\s*url\("\/brand\/space\.woff2"\)/,
+    /@font-face\s*\{[^}]*src:\s*url\("\/brand\/space-latin-20261018\.woff2"\)/,
   );
 });
 
@@ -50,11 +50,11 @@ test("a first deployment is explained as ordered steps with the real proof link"
 
 test("the app switcher names each app as its own repository does", () => {
   for (const [name, crop] of [
-    ["Here / there", "herethere-small-v4"],
-    ["Linkarooie", "linkarooie-small-v4"],
-    ["Link Check", "linkcheck-small-v4"],
-    ["Hello World", "hello-small-v4"],
-    ["Carry / forward", "carryforward-small-v4"],
+    ["Here / there", "herethere-small-20261018"],
+    ["Linkarooie", "linkarooie-small-20261018"],
+    ["Link Check", "linkcheck-small-20261018"],
+    ["Hello World", "hello-small-20261018"],
+    ["Carry / forward", "carryforward-small-20261018"],
   ]) {
     assert.ok(worker.includes(name), name + " stays in the switcher");
     assert.ok(
