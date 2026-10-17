@@ -8,11 +8,11 @@ const worker = readFileSync(new URL("src/worker.ts", root), "utf8");
 // The reference page is the only page this app serves, so its contract is
 // asserted from the rendered template rather than trusted to review by eye.
 test("the reference page shows the reviewed artwork and never a baked-in card", () => {
-  assert.match(worker, /\/brand\/hello-art-v3-960\.webp/);
-  assert.match(worker, /\/brand\/hello-art-v3-480\.webp 480w/);
-  assert.match(worker, /srcset="\/brand\/hello-art-v3-480\.webp 480w/);
+  assert.match(worker, /\/brand\/hello-art-v4-960\.webp/);
+  assert.match(worker, /\/brand\/hello-art-v4-480\.webp 480w/);
+  assert.match(worker, /srcset="\/brand\/hello-art-v4-480\.webp 480w/);
   assert.match(worker, /width="960" height="960"/);
-  assert.match(worker, /\/brand\/hello-share-v3\.jpg/);
+  assert.match(worker, /\/brand\/hello-share-v4\.jpg/);
   assert.doesNotMatch(worker, /hello-share-v2|share-ai-v1|greeting card and paper sprout/);
 });
 
@@ -50,11 +50,11 @@ test("a first deployment is explained as ordered steps with the real proof link"
 
 test("the app switcher names each app as its own repository does", () => {
   for (const [name, crop] of [
-    ["Here / there", "herethere-small-v3"],
-    ["Linkarooie", "linkarooie-small-v3"],
-    ["Link Check", "linkcheck-small-v3"],
-    ["Hello World", "hello-small-v3"],
-    ["Carry / forward", "carryforward-small-v3"],
+    ["Here / there", "herethere-small-v4"],
+    ["Linkarooie", "linkarooie-small-v4"],
+    ["Link Check", "linkcheck-small-v4"],
+    ["Hello World", "hello-small-v4"],
+    ["Carry / forward", "carryforward-small-v4"],
   ]) {
     assert.ok(worker.includes(name), name + " stays in the switcher");
     assert.ok(
