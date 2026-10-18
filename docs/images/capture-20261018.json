@@ -1,0 +1,42 @@
+{
+  "capturedAt": "2026-10-18T01:11:19.744Z",
+  "kind": "actual production public UI; fictional content remains labelled by the app",
+  "records": [
+    {
+      "id": "hello",
+      "url": "https://ready.loftwah.com/",
+      "width": 1440,
+      "height": 960,
+      "source": "13628d0e69470a81abf3cbfffeda509605cafc7d",
+      "file": "docs/images/public-reference-20261018.png",
+      "requestOverrides": false,
+      "verificationHeader": true,
+      "title": "Hello from Loftwah. \u00b7 App Composer",
+      "heading": "Hello from Loftwah.",
+      "theme": "dark",
+      "overflow": false,
+      "appsButton": true,
+      "sha256": "46751454e344b7ef9cbb19e21525354692f9bcb8a595ac1f8f7472464d2e4cc2",
+      "bytes": 357144,
+      "captureFile": "hello-1440.png"
+    },
+    {
+      "id": "hello",
+      "url": "https://ready.loftwah.com/",
+      "width": 390,
+      "height": 844,
+      "source": "13628d0e69470a81abf3cbfffeda509605cafc7d",
+      "file": "docs/images/public-reference-20261018-phone.png",
+      "requestOverrides": false,
+      "verificationHeader": true,
+      "title": "Hello from Loftwah. \u00b7 App Composer",
+      "heading": "Hello from Loftwah.",
+      "theme": "dark",
+      "overflow": false,
+      "appsButton": true,
+      "sha256": "c7baab6e0179057b73cbf5aff9727e5651b3319eae589a4b2e6ebc095de7d25c",
+      "bytes": 88352,
+      "captureFile": "hello-390.png"
+    }
+  ]
+}
