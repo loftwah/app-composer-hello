@@ -21,9 +21,9 @@ The release refuses absent intent, credential-bearing origins/remotes, another p
 
 The guard verifies actual GitHub main, reruns `pnpm test`, builds/deploys through the pinned Wrangler with the explicit root configuration, then checks the selected origin's exact app/source/title/contract with bounded retries. Redirects and another hostname cannot satisfy verification. It no longer probes the launch operator's hostname when configured for another target. Local `pnpm test` has no network/deployment side effects. Physical devices and a real customer-owned deployment remain separate acceptance gates.
 
-![Hello World public reference, captured in a real local browser](docs/images/public-reference.png)
+![Current Hello from Loftwah. · App Composer public screen](docs/images/public-reference-20261018.png)
 
-This is the actual public interface, captured locally with its fictional example content.
+Actual production public UI, captured 18 October 2026 at source `13628d0e69470a81abf3cbfffeda509605cafc7d`. [Phone capture](docs/images/public-reference-20261018-phone.png) · [Capture provenance](docs/images/capture-20261018.json).
 
 ## Public project standard
 
