@@ -13,7 +13,7 @@
   --field: #1d1f23;
   --border: #444952;
   --control: #797f8a;
-  --accent: #ff9b55;
+  --accent: var(--composer-accent);
 }
 :root[data-theme="light"] {
   color-scheme: light;
@@ -24,7 +24,7 @@
   --field: #fff;
   --border: #d3d1cc;
   --control: #747983;
-  --accent: #a63d08;
+  --accent: var(--composer-accent);
 }
 * {
   box-sizing: border-box;
@@ -102,14 +102,14 @@ h2 {
   margin: 12px 0;
   padding: 12px 20px;
   min-height: 48px;
-  background: var(--accent);
-  color: var(--bg);
+  background: var(--composer-action);
+  color: var(--composer-on-action);
   border-radius: 6px;
   text-decoration: none;
   font-weight: 600;
 }
 :root[data-theme="light"] .button {
-  color: white;
+  color: var(--composer-on-action);
 }
 .note {
   font-size: 14px;
@@ -174,7 +174,7 @@ button {
   z-index: 10;
 }
 :focus-visible {
-  outline: 3px solid var(--accent);
+  outline: 3px solid var(--composer-focus);
   outline-offset: 4px;
 }
 @media (max-width: 740px) {
@@ -203,3 +203,6 @@ button {
     scroll-behavior: auto;
   }
 }
+
+.button:hover { background: var(--composer-action-hover); }
+.button:active { background: var(--composer-action-pressed); }
