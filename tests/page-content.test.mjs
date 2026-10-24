@@ -64,3 +64,66 @@ test("the app switcher names each app as its own repository does", () => {
   }
   assert.doesNotMatch(worker, /Portable AI State/);
 });
+
+// LDraw is the reviewed Composer destination: one authored row using this app's
+// own root tile path, and no invented artwork of its own.
+test("the LDraw row keeps its exact link, local tile and authored label", () => {
+  const row =
+    '<li data-destination><a href="https://ldraw.loftwah.com/"><img src="/brand/apps/ldraw-tile-c9c2339a1296-d2e0dc4b-r2-96.webp" width="40" height="40" alt=""><span>LDraw<small>Editable diagrams</small></span></a></li>';
+  assert.ok(worker.includes(row), "the row keeps its local tile and empty alt");
+  assert.ok(
+    worker.indexOf(row) > worker.indexOf("Carry / forward"),
+    "LDraw follows Carry / forward",
+  );
+  assert.ok(
+    worker.indexOf(row) < worker.indexOf('href="https://composer.loftwah.com/ready"'),
+    "LDraw precedes the Composer task links",
+  );
+  assert.equal(
+    worker.split('href="https://ldraw.loftwah.com/"').length - 1,
+    1,
+    "exactly one LDraw destination",
+  );
+  assert.doesNotMatch(worker, /ldraw[^"<]*(logo|mark)\.(svg|png)/i);
+  assert.equal(
+    existsSync(
+      new URL(
+        "public/brand/apps/ldraw-tile-c9c2339a1296-d2e0dc4b-r2-96.webp",
+        root,
+      ),
+    ),
+    true,
+    "the reviewed tile is committed locally",
+  );
+});
+
+// The shipped controller owns search, arrow/Home/End navigation, Enter and Escape.
+// It indexes a destination by the first span's leading text, so the authored LDraw
+// row must match the controller's own LDraw definition rather than another name.
+test("the local launcher indexes LDraw for search and keeps its keyboard contract", () => {
+  const launcher = readFileSync(
+    new URL("public/brand/launcher.js", root),
+    "utf8",
+  );
+  assert.match(
+    launcher,
+    /name: "LDraw", href: "https:\/\/ldraw\.loftwah\.com\/", image: "apps\/ldraw-tile-c9c2339a1296-d2e0dc4b-r2-96\.webp", standaloneOnly: true, explainer: "\/ldraw", description: "Editable diagrams, PNG and SVG", keywords: "draw drawing diagram excalidraw scene png svg local offline"/,
+  );
+  assert.match(
+    launcher,
+    /querySelector\("span:not\(\.task-icon\)"\)\?\.firstChild\?\.textContent/,
+  );
+  assert.match(
+    launcher,
+    /value\.normalize\("NFD"\)\.replace\(\/\\p\{Diacritic\}\/gu, ""\)\.toLocaleLowerCase\("en"\)/,
+  );
+  assert.match(launcher, /event\.key === "Escape"/);
+  assert.match(
+    launcher,
+    /event\.key === "ArrowDown" \|\| event\.key === "ArrowUp" \|\| event\.key === "Home" \|\| event\.key === "End"/,
+  );
+  assert.match(
+    launcher,
+    /\(event\.ctrlKey \|\| event\.metaKey\) && !event\.altKey && event\.key\.toLowerCase\(\) === "k"/,
+  );
+});
