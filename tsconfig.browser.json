@@ -8,7 +8,9 @@
     "strict": true,
     "skipLibCheck": true,
     "noEmitOnError": true,
-    "outDir": "dist/browser"
+    "outDir": "dist/browser",
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true
   },
   "include": ["src/browser"]
 }

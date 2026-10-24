@@ -10,7 +10,9 @@
     "resolveJsonModule": true,
     "declaration": true,
     "noEmitOnError": true,
-    "outDir": "dist/typescript"
+    "outDir": "dist/typescript",
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true
   },
   "include": ["src/worker.ts", "src/publisher.mts", "worker-configuration.d.ts"]
 }

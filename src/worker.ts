@@ -1,6 +1,6 @@
 import { health, publish, pageEvent, type PublisherEnv } from "./publisher.mjs";
 import config from "../config.json";
-interface WorkerEnv extends Env, PublisherEnv {}
+export interface WorkerEnv extends Env, PublisherEnv {}
 declare const BUILD_SHA: string;
 const esc = (s: string) =>
   s.replace(
@@ -52,4 +52,4 @@ export default {
       publish(env, context, req, "app_open");
     return response;
   },
-};
+} satisfies ExportedHandler<WorkerEnv>;

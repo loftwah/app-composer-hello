@@ -10,6 +10,8 @@ const files = [
   "src/browser/navigation.ts",
   "scripts/build-source.mjs",
   "scripts/format-source.mjs",
+  "tests/type-coverage.test.mjs",
+  "tests/worker.test.mjs",
   "tsconfig.json",
   "tsconfig.browser.json",
   "package.json",
