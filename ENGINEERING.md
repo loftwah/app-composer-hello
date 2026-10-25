@@ -1,10 +1,10 @@
 # Engineering baseline
 
-This is the first #175 type-coverage slice, using Node 22, pinned pnpm 12.8.1, TypeScript 6.0.3, Wrangler 4.143.1 and Prettier 3.9.10. Node/pnpm run local tools; Cloudflare Workers execute the deployed application. Bun is not part of this tested command contract. Use `pnpm install --frozen-lockfile`; the existing reviewed esbuild/workerd native-build policy stays in `pnpm-workspace.yaml`.
+Reviewed 25 October 2026 for the #316/#321 toolchain update. This is the first #175 type-coverage slice, using Node 22, pinned pnpm 12.8.1, TypeScript 6.0.3, Wrangler 4.152.0 and Prettier 3.9.10. Node/pnpm run local tools; Cloudflare Workers execute the deployed application. Bun is not part of this tested command contract. Use `pnpm install --frozen-lockfile`; the existing reviewed esbuild/workerd native-build policy stays in `pnpm-workspace.yaml`.
 
 | Command | Verifies or does |
 | --- | --- |
-| `pnpm dev` | Strictly checks/emits local source, then starts Wrangler. |
+| `pnpm dev` | Strictly checks/emits local source, then starts Wrangler with an explicit development build identity. |
 | `pnpm source:write` | Strictly checks Worker/browser source and emits committed readable distributions in memory. |
 | `pnpm check:types` | Checks configuration-derived bindings and both strict compiler environments, then rejects stale generated files. |
 | `pnpm lint` | TypeScript semantic unused-local/parameter checks over maintained Worker/browser source. This initial scoped lint is not an ESLint claim. |

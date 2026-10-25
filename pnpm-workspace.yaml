@@ -9,4 +9,6 @@ minimumReleaseAgeExclude:
   - '@cloudflare/workerd-windows-64@1.20261013.1'
   - workerd@1.20261013.1
 overrides:
+  # GHSA-xjj6-f33q-929c and related Undici advisories, reviewed 25 October 2026.
+  'undici@>=7.0.0 <7.30.1': 7.30.1
   workerd: 1.20261013.1
