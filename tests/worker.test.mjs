@@ -126,6 +126,12 @@ test("assets retain the actual request and response; fictional page values are e
   assert.match(html, /&lt;script&gt;canary&lt;\/script&gt;/);
   assert.doesNotMatch(html, /<script>canary/);
   assert.match(html, /data-theme="light"/);
+  const video = html.match(/<video\b[^>]*>/)?.[0];
+  assert.ok(video?.includes('preload="none"'));
+  assert.doesNotMatch(video, /\bautoplay\b/);
+  assert.match(html, /small-beginning-motion\.mp4/);
+  assert.match(html, /artwork, not deployment evidence/);
+  assert.match(html, /woodhouse\.loftwah\.com\/api\/v1\/assets\/new-116/);
   assert.match(
     page.headers.get("Content-Security-Policy"),
     /script-src 'self' 'nonce-[A-Za-z0-9+/=]+'/,
