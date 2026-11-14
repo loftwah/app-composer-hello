@@ -185,3 +185,103 @@ test("a failed optional transport completes without retries or rejected backgrou
   await Promise.all(f.deferred);
   assert.equal(calls, 1);
 });
+
+test("the published film supports bounded single byte ranges and conditional requests", async () => {
+  const f = fixture();
+  const bytes = new TextEncoder().encode("0123456789");
+  f.env.ASSETS.fetch = async (req) => {
+    if (req.headers.get("if-none-match") === '"fixture"')
+      return new Response(null, {
+        status: 304,
+        headers: { etag: '"fixture"' },
+      });
+    return new Response(req.method === "HEAD" ? null : bytes, {
+      headers: {
+        "content-type": "video/mp4",
+        "content-length": "10",
+        etag: '"fixture"',
+        "last-modified": "Sun, 01 Nov 2026 00:00:00 GMT",
+        "cache-control": "public, max-age=60",
+        "x-content-type-options": "nosniff",
+      },
+    });
+  };
+  const path = "/brand/small-beginning-motion.mp4";
+  for (const [range, expected, contentRange] of [
+    ["bytes=2-4", "234", "bytes 2-4/10"],
+    ["bytes=7-", "789", "bytes 7-9/10"],
+    ["bytes=-3", "789", "bytes 7-9/10"],
+  ]) {
+    const res = await worker.fetch(
+      request(path, { headers: { range } }),
+      f.env,
+      f.context,
+    );
+    assert.equal(res.status, 206);
+    assert.equal(await res.text(), expected);
+    assert.equal(res.headers.get("content-range"), contentRange);
+    assert.equal(res.headers.get("content-length"), String(expected.length));
+    assert.equal(res.headers.get("x-content-type-options"), "nosniff");
+  }
+  const invalid = await worker.fetch(
+    request(path, { headers: { range: "bytes=99-" } }),
+    f.env,
+    f.context,
+  );
+  assert.equal(invalid.status, 416);
+  assert.equal(invalid.headers.get("content-range"), "bytes */10");
+  const changed = await worker.fetch(
+    request(path, { headers: { range: "bytes=0-2", "if-range": '"old"' } }),
+    f.env,
+    f.context,
+  );
+  assert.equal(changed.status, 200);
+  assert.equal(await changed.text(), "0123456789");
+  const same = await worker.fetch(
+    request(path, { headers: { range: "bytes=0-2", "if-range": '"fixture"' } }),
+    f.env,
+    f.context,
+  );
+  assert.equal(same.status, 206);
+  assert.equal(await same.text(), "012");
+  const matchingDate = await worker.fetch(
+    request(path, {
+      headers: {
+        range: "bytes=0-2",
+        "if-range": "Sun, 01 Nov 2026 00:00:00 GMT",
+      },
+    }),
+    f.env,
+    f.context,
+  );
+  assert.equal(matchingDate.status, 206);
+  const changedDate = await worker.fetch(
+    request(path, {
+      headers: {
+        range: "bytes=0-2",
+        "if-range": "Mon, 02 Nov 2026 00:00:00 GMT",
+      },
+    }),
+    f.env,
+    f.context,
+  );
+  assert.equal(changedDate.status, 200);
+  const unchanged = await worker.fetch(
+    request(path, {
+      headers: { range: "bytes=0-2", "if-none-match": '"fixture"' },
+    }),
+    f.env,
+    f.context,
+  );
+  assert.equal(unchanged.status, 304);
+  const head = await worker.fetch(
+    request(path, { method: "HEAD", headers: { range: "bytes=0-2" } }),
+    f.env,
+    f.context,
+  );
+  assert.equal(head.status, 200);
+  assert.equal(head.headers.get("content-length"), "10");
+  const plain = await worker.fetch(request(path), f.env, f.context);
+  assert.equal(plain.status, 200);
+  assert.equal(await plain.text(), "0123456789");
+});
