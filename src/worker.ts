@@ -22,9 +22,14 @@ async function filmResponse(req: Request, assets: Fetcher): Promise<Response> {
   headers.delete("if-range");
   const full = await assets.fetch(new Request(req, { headers }));
   if (full.status !== 200) return full;
-  const size = Number(full.headers.get("content-length"));
-  // Refuse to buffer unexpectedly large or unmeasured assets.
-  if (!Number.isSafeInteger(size) || size <= 0 || size > 2 * 1024 * 1024)
+  const length = full.headers.get("content-length");
+  const declared = length === null ? null : Number(length);
+  const limit = 2 * 1024 * 1024;
+  // A declared oversized or invalid asset stays on its ordinary full path.
+  if (
+    declared !== null &&
+    (!Number.isSafeInteger(declared) || declared <= 0 || declared > limit)
+  )
     return full;
   const ifRange = req.headers.get("if-range");
   if (ifRange) {
@@ -45,6 +50,23 @@ async function filmResponse(req: Request, assets: Fetcher): Promise<Response> {
     (endNumber !== null && !Number.isSafeInteger(endNumber))
   )
     return full;
+  if (!full.body) return new Response("Asset unavailable.", { status: 502 });
+  const reader = full.body.getReader();
+  const chunks: Uint8Array[] = [];
+  let total = 0;
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    total += value.byteLength;
+    if (total > limit || (declared !== null && total > declared)) {
+      await reader.cancel();
+      return new Response("Asset length changed.", { status: 502 });
+    }
+    chunks.push(value);
+  }
+  if (total === 0 || (declared !== null && total !== declared))
+    return new Response("Asset length changed.", { status: 502 });
+  const size = total;
   const start =
     startNumber === null ? Math.max(0, size - (endNumber ?? 0)) : startNumber;
   const end =
@@ -60,22 +82,6 @@ async function filmResponse(req: Request, assets: Fetcher): Promise<Response> {
     responseHeaders.delete("content-length");
     return new Response(null, { status: 416, headers: responseHeaders });
   }
-  if (!full.body) return new Response("Asset unavailable.", { status: 502 });
-  const reader = full.body.getReader();
-  const chunks: Uint8Array[] = [];
-  let total = 0;
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    total += value.byteLength;
-    if (total > size) {
-      await reader.cancel();
-      return new Response("Asset length changed.", { status: 502 });
-    }
-    chunks.push(value);
-  }
-  if (total !== size)
-    return new Response("Asset length changed.", { status: 502 });
   const bytes = new Uint8Array(size);
   let offset = 0;
   for (const chunk of chunks) {
