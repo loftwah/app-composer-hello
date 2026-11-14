@@ -206,3 +206,27 @@ button {
 
 .button:hover { background: var(--composer-action-hover); }
 .button:active { background: var(--composer-action-pressed); }
+
+.motion-study {
+  border-top: 1px solid var(--border);
+  padding: 20px 0 12px;
+}
+.motion-study summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+.motion-study p {
+  color: var(--muted);
+  max-width: 60ch;
+}
+.motion-study video {
+  display: block;
+  width: min(100%, 280px);
+  height: auto;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+.motion-study a {
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
