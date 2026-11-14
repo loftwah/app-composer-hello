@@ -285,3 +285,42 @@ test("the published film supports bounded single byte ranges and conditional req
   assert.equal(plain.status, 200);
   assert.equal(await plain.text(), "0123456789");
 });
+
+test("film ranges measure a bounded stream when the asset omits length", async () => {
+  const f = fixture();
+  const path = "/brand/small-beginning-motion.mp4";
+  const stream = (bytes) =>
+    new ReadableStream({
+      start(controller) {
+        controller.enqueue(bytes);
+        controller.close();
+      },
+    });
+  f.env.ASSETS.fetch = async () =>
+    new Response(stream(new TextEncoder().encode("0123456789")), {
+      headers: { "content-type": "video/mp4" },
+    });
+  const ranged = await worker.fetch(
+    request(path, { headers: { range: "bytes=2-4" } }),
+    f.env,
+    f.context,
+  );
+  assert.equal(ranged.status, 206);
+  assert.equal(ranged.headers.get("content-range"), "bytes 2-4/10");
+  assert.equal(await ranged.text(), "234");
+  const beyond = await worker.fetch(
+    request(path, { headers: { range: "bytes=100-" } }),
+    f.env,
+    f.context,
+  );
+  assert.equal(beyond.status, 416);
+  assert.equal(beyond.headers.get("content-range"), "bytes */10");
+  f.env.ASSETS.fetch = async () =>
+    new Response(stream(new Uint8Array(2 * 1024 * 1024 + 1)));
+  const oversized = await worker.fetch(
+    request(path, { headers: { range: "bytes=0-1" } }),
+    f.env,
+    f.context,
+  );
+  assert.equal(oversized.status, 502);
+});
