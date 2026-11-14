@@ -10,6 +10,85 @@ const esc = (s: string) =>
         c
       ]!,
   );
+// Workers static assets return a full 200 for Range requests. Keep this
+// bounded workaround specific to the published film, with no remote fetch.
+async function filmResponse(req: Request, assets: Fetcher): Promise<Response> {
+  const range = req.headers.get("range");
+  const match = range?.match(/^bytes=(\d*)-(\d*)$/);
+  if (req.method !== "GET" || !match || (!match[1] && !match[2]))
+    return assets.fetch(req);
+  const headers = new Headers(req.headers);
+  headers.delete("range");
+  headers.delete("if-range");
+  const full = await assets.fetch(new Request(req, { headers }));
+  if (full.status !== 200) return full;
+  const size = Number(full.headers.get("content-length"));
+  // Refuse to buffer unexpectedly large or unmeasured assets.
+  if (!Number.isSafeInteger(size) || size <= 0 || size > 2 * 1024 * 1024)
+    return full;
+  const ifRange = req.headers.get("if-range");
+  if (ifRange) {
+    const etag = full.headers.get("etag");
+    const modified = full.headers.get("last-modified");
+    const date = Date.parse(ifRange),
+      last = modified ? Date.parse(modified) : NaN;
+    if (
+      !(etag && !etag.startsWith("W/") && ifRange === etag) &&
+      !(Number.isFinite(date) && Number.isFinite(last) && last === date)
+    )
+      return full;
+  }
+  const startNumber = match[1] ? Number(match[1]) : null;
+  const endNumber = match[2] ? Number(match[2]) : null;
+  if (
+    (startNumber !== null && !Number.isSafeInteger(startNumber)) ||
+    (endNumber !== null && !Number.isSafeInteger(endNumber))
+  )
+    return full;
+  const start =
+    startNumber === null ? Math.max(0, size - (endNumber ?? 0)) : startNumber;
+  const end =
+    startNumber === null ? size - 1 : Math.min(endNumber ?? size - 1, size - 1);
+  const responseHeaders = new Headers(full.headers);
+  responseHeaders.set("accept-ranges", "bytes");
+  if (
+    start >= size ||
+    start > end ||
+    (startNumber === null && endNumber === 0)
+  ) {
+    responseHeaders.set("content-range", `bytes */${size}`);
+    responseHeaders.delete("content-length");
+    return new Response(null, { status: 416, headers: responseHeaders });
+  }
+  if (!full.body) return new Response("Asset unavailable.", { status: 502 });
+  const reader = full.body.getReader();
+  const chunks: Uint8Array[] = [];
+  let total = 0;
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    total += value.byteLength;
+    if (total > size) {
+      await reader.cancel();
+      return new Response("Asset length changed.", { status: 502 });
+    }
+    chunks.push(value);
+  }
+  if (total !== size)
+    return new Response("Asset length changed.", { status: 502 });
+  const bytes = new Uint8Array(size);
+  let offset = 0;
+  for (const chunk of chunks) {
+    bytes.set(chunk, offset);
+    offset += chunk.byteLength;
+  }
+  responseHeaders.set("content-range", `bytes ${start}-${end}/${size}`);
+  responseHeaders.set("content-length", String(end - start + 1));
+  return new Response(bytes.slice(start, end + 1), {
+    status: 206,
+    headers: responseHeaders,
+  });
+}
 const app = {
   async fetch(req: Request, env: WorkerEnv) {
     const u = new URL(req.url);
@@ -24,6 +103,8 @@ const app = {
         },
         { headers: { "Cache-Control": "no-store" } },
       );
+    if (u.pathname === "/brand/small-beginning-motion.mp4")
+      return filmResponse(req, env.ASSETS);
     if (u.pathname !== "/") return env.ASSETS.fetch(req);
     const origin = env.PUBLIC_ORIGIN || u.origin;
     const nonce = btoa(
