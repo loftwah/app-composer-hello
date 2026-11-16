@@ -1,5 +1,5 @@
 {
   "title": "Hello from Loftwah.",
-  "intro": "Made in my App Composer workspace. A tiny app that confirms this environment can build and deploy.",
+  "intro": "Made in my App Composer workspace. A tiny app that confirms this environment can build, deploy and change.",
   "theme": "midnight"
 }
