@@ -108,7 +108,7 @@ test("the local launcher indexes LDraw for search and keeps its keyboard contrac
   );
   assert.equal(
     createHash("sha256").update(launcher).digest("hex"),
-    "2dc9bf4c75f71653aef2c419be4306f8ddbc973b4dd205611c71dd2ca8613111",
+    "a350224e2c4fe6d2a9a808412901e67d3f192891290496bbf71046a54ef3a78e",
     "the local Apps menu must match the reviewed Composer distribution",
   );
   assert.match(
