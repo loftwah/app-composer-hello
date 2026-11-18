@@ -25,6 +25,8 @@ The guard verifies actual GitHub main, reruns `pnpm check` (strict Worker/browse
 
 Actual production public UI, captured 18 October 2026 at source `13628d0e69470a81abf3cbfffeda509605cafc7d`. [Phone capture](docs/images/public-reference-20261018-phone.png) · [Capture provenance](docs/images/capture-20261018.json).
 
+Canonical releases record a private release-timing/v1 receipt under ignored `.release/timing/`. Set `HELLO_FIRST_EDIT_AT` to the first edit in UTC for end-to-end timing. Runs at or above 300 seconds report through the existing repo-scoped GitHub session. Use `node scripts/release-watchdog.mjs --repo loftwah/app-composer-hello --check-stuck --retry-pending` to check stalled runs and retry pending alerts. Independent forks use the same guarded release without central reporting.
+
 ## Public project standard
 
 Reviewed 13 October 2026; artwork and first-deployment clarity reviewed 17 October 2026. The app supplies saved reader dark/light themes, native app navigation with Ctrl/Cmd+K and ordinary links, visible keyboard focus, phone layouts, favicon/touch icon and page-specific social metadata. These features do not widen signup, owner access or disclosure permissions.
