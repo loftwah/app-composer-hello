@@ -98,8 +98,8 @@ test("the LDraw row keeps its exact link, local tile and authored label", () => 
 });
 
 // The shipped controller owns search, arrow/Home/End navigation, Enter and Escape.
-// It indexes a destination by the first span's leading text, so the authored LDraw
-// row must match the controller's own LDraw definition rather than another name.
+// It indexes each destination by its registry name, keywords and aliases, so the
+// reviewed LDraw entry must keep its local tile digest and app-owned destination.
 test("the local launcher indexes LDraw for search and keeps its keyboard contract", () => {
   const launcher = readFileSync(
     new URL("public/brand/launcher.js", root),
@@ -107,11 +107,11 @@ test("the local launcher indexes LDraw for search and keeps its keyboard contrac
   );
   assert.match(
     launcher,
-    /name: "LDraw", href: "https:\/\/ldraw\.loftwah\.com\/", image: "apps\/ldraw-tile-c9c2339a1296-d2e0dc4b-r2-96\.webp", standaloneOnly: true, explainer: "\/ldraw", description: "Editable diagrams, PNG and SVG", keywords: "draw drawing diagram excalidraw scene png svg local offline"/,
+    /name: "LDraw", description: "Draw and save editable diagrams locally, then export PNG or SVG\.", keywords: "draw drawing diagram excalidraw scene png svg local offline", aliases: \["draw", "diagram", "drawing"\], audience: "public", group: "apps", href: "https:\/\/ldraw\.loftwah\.com\/", image: "apps\/ldraw-tile-fa7a2ab6171c-010cfbd2-r2-96\.webp", catalogue: "ldraw"/,
   );
   assert.match(
     launcher,
-    /querySelector\("span:not\(\.task-icon\)"\)\?\.firstChild\?\.textContent/,
+    /const text = \(entry\.textContent \?\? ""\)\.replace\(\/\\s\+\/g, " "\)\.trim\(\);/,
   );
   assert.match(
     launcher,
