@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, existsSync } from "node:fs";
+import { createHash } from "node:crypto";
 
 const root = new URL("..", import.meta.url);
 const worker = readFileSync(new URL("src/worker.ts", root), "utf8");
@@ -104,6 +105,11 @@ test("the local launcher indexes LDraw for search and keeps its keyboard contrac
   const launcher = readFileSync(
     new URL("public/brand/launcher.js", root),
     "utf8",
+  );
+  assert.equal(
+    createHash("sha256").update(launcher).digest("hex"),
+    "2dc9bf4c75f71653aef2c419be4306f8ddbc973b4dd205611c71dd2ca8613111",
+    "the local Apps menu must match the reviewed Composer distribution",
   );
   assert.match(
     launcher,
