@@ -1,4 +1,7 @@
 // Release inputs are explicit operator intent, not defaults copied from this repository.
+// Only the canonical, explicitly selected production repository is timed.
+export const CANONICAL_REPOSITORY='loftwah/app-composer-hello';
+export function isCanonicalProduction(repository){return repository===CANONICAL_REPOSITORY;}
 export function expectedTarget(env) {
   const target={repository:env.HELLO_REPOSITORY,account:env.HELLO_ACCOUNT_ID,worker:env.HELLO_WORKER,origin:env.HELLO_ORIGIN};
   if(typeof target.repository!=='string'||!/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(target.repository)||typeof target.account!=='string'||!/^[a-f0-9]{32}$/.test(target.account)||typeof target.worker!=='string'||!/^[a-z][a-z0-9-]{0,62}$/.test(target.worker))throw new Error('Select HELLO_REPOSITORY, HELLO_ACCOUNT_ID, HELLO_WORKER and HELLO_ORIGIN explicitly before release.');
